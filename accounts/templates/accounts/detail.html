@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block body %}
+<p>아이디 : {{ user_detail.pk }}</p>
+<p>이름 : {{ user_detail.username }}</p>
+<p>이메일 : {{ user_detail.email }}</p>
+
+<p>팔로잉 : {{ user_detail.followings.all.count }}</p>
+<p>팔로워 : {{ user_detail.followers.all.count }}</p>
+{% if user != user_detail %}
+    {% if user in user_detail.followers.all %}
+        <a href="{% url 'accounts:follow' user_detail.pk %}">팔로잉</a>
+    {% else %}
+        <a href="{% url 'accounts:follow' user_detail.pk %}">팔로우</a>
+    {% endif %}
+{% endif %}
+<hr>
+<p>내가 작성한 리뷰 목록</p>
+{% for score in user_info.score_set.all %}
+    <p>{{ score.movie.title }}</p>
+    <p>{{ score.content }}</p>
+    <p>{{ score.value }}</p>
+{% endfor %}
+<p>내 친구가 좋아하는 영화</p>
+{% for user_follow in user_info.followings.all %}
+    <p>{{ user_follow.score_set.first.movie.title }}</p>
+    <p>{{ user_follow.score_set.first.value }}</p>
+{% endfor %}
+<hr>
+{% endblock %}

@@ -1,0 +1,16 @@
+<p>제목: {{ movie_detail.title }}</p>
+<p>관객 수: {{ movie_detail.audience }}</p>
+<img src="{{ movie_detail.poster_url }}" alt="{{ movie.title }}포스터">
+<p>스토리: {{ movie_detail.description }}</p>
+<p>장르: {{ movie_detail.genre }}</p>
+<p>평점 목록</p>
+
+{% for content in movie_detail.score_set.all %}
+    <p>{{ content.content }}</p>
+{% endfor %}
+
+<form action="{% url 'movies:new_score' movie_detail.pk %}" method="post">
+    {% csrf_token %}
+    {{ score_form }}
+    <input type="submit" value="작성하기">
+</form>
