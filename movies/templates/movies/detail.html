@@ -1,12 +1,23 @@
+{% extends 'base.html' %}
+{% block body %}
 <p>제목: {{ movie_detail.title }}</p>
 <p>관객 수: {{ movie_detail.audience }}</p>
 <img src="{{ movie_detail.poster_url }}" alt="{{ movie.title }}포스터">
 <p>스토리: {{ movie_detail.description }}</p>
 <p>장르: {{ movie_detail.genre }}</p>
-<p>평점 목록</p>
+<hr>
+<h2>평점 목록</h2>
+<br>
 
 {% for content in movie_detail.score_set.all %}
-    <p>{{ content.content }}</p>
+    <p><b>{{ content.user }}님의 댓글:</b> {{ content.content }} <b>| 평점:</b> {{ content.value }}</p>
+    {% if user == content.user or user.is_superuser %}
+    <form action="{% url 'movies:del_score' movie_detail.pk content.pk %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="삭제">
+    </form>
+    {% endif %}
+    <hr>
 {% endfor %}
 
 <form action="{% url 'movies:new_score' movie_detail.pk %}" method="post">
@@ -14,3 +25,4 @@
     {{ score_form }}
     <input type="submit" value="작성하기">
 </form>
+{% endblock %}

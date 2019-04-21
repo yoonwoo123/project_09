@@ -26,8 +26,6 @@ def new_score(request, movie_pk):
             score.movie_id = movie_pk
             score.user = request.user
             score.save()
-        else:
-            return redirect('movies:list')
         context = {'score_form': score_form}
         return redirect('movies:detail', movie_pk)
         

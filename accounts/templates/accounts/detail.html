@@ -14,16 +14,24 @@
     {% endif %}
 {% endif %}
 <hr>
-<p>내가 작성한 리뷰 목록</p>
-{% for score in user_info.score_set.all %}
-    <p>{{ score.movie.title }}</p>
-    <p>{{ score.content }}</p>
-    <p>{{ score.value }}</p>
+{% if user.username == user_detail.username %}
+    <h2>내가 작성한 리뷰 목록</h2>
+{% else %}
+<h2>{{ user_detail.username }}이 작성한 리뷰 목록</h2>
+{% endif %}
+<br>
+{% for score in user_detail.score_set.all %}
+    <p>영화: {{ score.movie.title }}</p>
+    <a>댓글: {{ score.content }}</a>&nbsp;
+    <a>평점: {{ score.value }}</a>
+    <hr>
 {% endfor %}
-<p>내 친구가 좋아하는 영화</p>
-{% for user_follow in user_info.followings.all %}
+
+{% if user.username == user_detail.username %}
+<h2>내 친구가 좋아하는 영화</h2>
+{% for user_follow in user_detail.followings.all %}
     <p>{{ user_follow.score_set.first.movie.title }}</p>
     <p>{{ user_follow.score_set.first.value }}</p>
 {% endfor %}
-<hr>
+{% endif %}
 {% endblock %}
